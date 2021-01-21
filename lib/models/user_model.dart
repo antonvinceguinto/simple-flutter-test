@@ -18,7 +18,7 @@ class UserModel {
   final String email;
   final String password;
   final String name;
-  final Timestamp birthDate;
+  final DateTime birthDate;
   final String address;
   final int contactNumber;
   final String imageUrl;

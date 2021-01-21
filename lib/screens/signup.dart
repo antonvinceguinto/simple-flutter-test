@@ -1,6 +1,9 @@
 import 'dart:io';
-
+import 'package:intl/intl.dart';
 import 'package:simple_test/utils/imports.dart';
+
+import '../models/user_model.dart';
+import '../models/user_model.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp();
@@ -24,6 +27,7 @@ class _SignUpState extends State<SignUp> {
   File imageFile;
 
   DateTime birthDate;
+  final dateFormat = DateFormat('MMMM dd, yyyy');
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +53,7 @@ class _SignUpState extends State<SignUp> {
                         children: [
                           Positioned.fill(
                             child: CircleAvatar(
-                              child: Icon(
-                                Icons.cloud_upload,
-                                size: 13,
-                              ),
+                              backgroundColor: Colors.grey.withOpacity(0.1),
                               backgroundImage: imageFile == null
                                   ? null
                                   : FileImage(imageFile),
@@ -66,18 +67,25 @@ class _SignUpState extends State<SignUp> {
                                     source: ImageSource.gallery);
 
                                 if (pickedFile != null) {
-                                  imageFile = File(pickedFile.path);
+                                  setState(() {
+                                    imageFile = File(pickedFile.path);
+                                  });
                                 }
                               },
                               child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black26,
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: Icon(
-                                  Icons.cloud_upload,
-                                  color: Colors.white,
-                                ),
+                                decoration: imageFile == null
+                                    ? BoxDecoration(
+                                        color: Colors.black26,
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      )
+                                    : null,
+                                child: imageFile == null
+                                    ? Icon(
+                                        Icons.cloud_upload,
+                                        color: Colors.white,
+                                      )
+                                    : SizedBox(),
                               ),
                             ),
                           ),
@@ -105,6 +113,34 @@ class _SignUpState extends State<SignUp> {
                       'Contact Number',
                     ),
                     SizedBox(height: 12),
+                    InkWell(
+                      onTap: () async {
+                        final selectedDate = await showAdaptiveDatePicker(
+                          firstDateTime: DateTime(1990),
+                          initialDateTime: DateTime.now(),
+                          lastDateTime: DateTime.now(),
+                        );
+
+                        if (selectedDate != null) {
+                          setState(() {
+                            birthDate = selectedDate;
+                          });
+                        }
+                      },
+                      child: Container(
+                        height: 30,
+                        width: context.width,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            birthDate == null
+                                ? 'Select Birthdate'
+                                : dateFormat.format(birthDate),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12),
                     Container(
                       width: context.width,
                       child: RaisedButton(
@@ -112,6 +148,29 @@ class _SignUpState extends State<SignUp> {
                           if (!_formKey.currentState.validate()) {
                             return;
                           }
+
+                          if (birthDate == null) {
+                            return Get.rawSnackbar(
+                                message: 'Please enter your birthdate');
+                          }
+
+                          if (imageFile == null) {
+                            return Get.rawSnackbar(
+                                message: 'Please select a profile picture');
+                          }
+
+                          final UserModel userModel = UserModel(
+                            email: emailFieldController.text.trim(),
+                            password: passwordFieldController.text.trim(),
+                            name: nameFieldController.text.trim(),
+                            address: addressFieldController.text.trim(),
+                            contactNumber:
+                                int.parse(contactFieldController.text.trim()),
+                            birthDate: birthDate,
+                            imageUrl: '',
+                          );
+
+                          controller.registerUser(userModel);
                         },
                         color: Colors.redAccent,
                         child: Text(

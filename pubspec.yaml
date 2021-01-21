@@ -24,6 +24,7 @@ dependencies:
   # Additional dependencies
   image_picker: ^0.6.7+21
   cached_network_image: ^2.5.0
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:

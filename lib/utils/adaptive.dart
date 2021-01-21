@@ -223,16 +223,15 @@ class AdaptiveSimpleDialogOption extends StatelessWidget {
 }
 
 Future<DateTime> showAdaptiveDatePicker({
-  @required BuildContext context,
   @required DateTime firstDateTime,
   @required DateTime initialDateTime,
   @required DateTime lastDateTime,
   Brightness brightness,
 }) {
-  final theme = Theme.of(context);
+  final theme = Theme.of(Get.context);
   return theme.platform == TargetPlatform.iOS
       ? showCupertinoModalPopup<DateTime>(
-          context: context,
+          context: Get.context,
           builder: (BuildContext context) {
             return _CupertinoDatePicker(
               firstDateTime: firstDateTime,
@@ -242,7 +241,7 @@ Future<DateTime> showAdaptiveDatePicker({
           },
         )
       : showDatePicker(
-          context: context,
+          context: Get.context,
           firstDate: firstDateTime,
           initialDate: initialDateTime,
           lastDate: lastDateTime,

@@ -9,11 +9,12 @@ class SimpleController extends GetxController {
 
   Future registerUser(UserModel userModel) async {
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: userModel.email,
         password: userModel.password,
       );
+
+      await saveUserToFireStore(userModel);
     } on FirebaseAuthException catch (e) {
       return showGenericAlertDialog(error: e);
     } catch (e) {
@@ -22,26 +23,15 @@ class SimpleController extends GetxController {
   }
 
   Future saveUserToFireStore(UserModel userModel) async {
-    final FirebaseFirestore fireStore = FirebaseFirestore.instance;
-
     final CollectionReference userRef =
         FirebaseFirestore.instance.collection('users');
+
+    // TODO: Upload image
 
     final UserModel userModel = UserModel();
 
     final Map<String, dynamic> freshUserModel = userModel.toJson();
 
-    final fireRef = await userRef.add(freshUserModel);
-
-    final DocumentReference documentReference =
-        fireStore.collection('users').doc(fireRef.id);
-
-    await FirebaseFirestore.instance
-        .runTransaction((Transaction myTransaction) async {
-      myTransaction.update(
-        documentReference,
-        {'fireId': fireRef.id},
-      );
-    });
+    await userRef.add(freshUserModel);
   }
 }
