@@ -17,8 +17,7 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // home: Login(),
-      home: HomePage(),
+      home: Login(),
     );
   }
 }
