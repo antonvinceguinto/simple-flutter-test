@@ -14,17 +14,19 @@ dependencies:
 
   # Core
   get: ^3.24.0
+  intl: ^0.16.1
   flutter_secure_storage: ^3.3.5
 
   # Firebase
   firebase_core: ^0.7.0
   firebase_auth: ^0.20.0+1
   cloud_firestore: ^0.16.0
+  firebase_storage: ^7.0.0
 
   # Additional dependencies
   image_picker: ^0.6.7+21
   cached_network_image: ^2.5.0
-  intl: ^0.16.1
+  flutter_slidable: ^0.5.7
 
 dev_dependencies:
   flutter_test:

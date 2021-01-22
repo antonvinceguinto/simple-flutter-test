@@ -44,17 +44,25 @@ Future showGenericAlertDialog({@required FirebaseAuthException error}) async {
           case 'user-not-found':
             errMsg = 'No account found with this email';
             break;
+          case 'weak-password':
+            errMsg = 'Password should be at least 6 characters';
+            break;
           default:
             errMsg = 'Login failed. Please try again.';
             break;
         }
 
         return AdaptiveAlertDialog(
-          title: Text('Somehting went wrong'),
+          title: Text('Something went wrong'),
           content: SingleChildScrollView(child: Text('$errMsg')),
           actions: <Widget>[
             AdaptiveDialogAction(
-              child: Text('OK'),
+              child: Text(
+                'OK',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
               onPressed: () => Get.back(),
             )
           ],

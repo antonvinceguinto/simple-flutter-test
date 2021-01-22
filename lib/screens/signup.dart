@@ -1,9 +1,8 @@
 import 'dart:io';
-import 'package:intl/intl.dart';
-import 'package:simple_test/utils/imports.dart';
 
-import '../models/user_model.dart';
-import '../models/user_model.dart';
+import 'package:intl/intl.dart';
+import 'package:simple_test/models/user_model.dart';
+import 'package:simple_test/utils/imports.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp();
@@ -112,7 +111,7 @@ class _SignUpState extends State<SignUp> {
                       contactFieldController,
                       'Contact Number',
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: 16),
                     InkWell(
                       onTap: () async {
                         final selectedDate = await showAdaptiveDatePicker(
@@ -128,8 +127,13 @@ class _SignUpState extends State<SignUp> {
                         }
                       },
                       child: Container(
-                        height: 30,
+                        height: 50,
                         width: context.width,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        padding: const EdgeInsets.only(left: 16),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -143,40 +147,46 @@ class _SignUpState extends State<SignUp> {
                     SizedBox(height: 12),
                     Container(
                       width: context.width,
-                      child: RaisedButton(
-                        onPressed: () async {
-                          if (!_formKey.currentState.validate()) {
-                            return;
-                          }
+                      child: Obx(
+                        () => RaisedButton(
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : () async {
+                                  if (!_formKey.currentState.validate()) {
+                                    return;
+                                  }
 
-                          if (birthDate == null) {
-                            return Get.rawSnackbar(
-                                message: 'Please enter your birthdate');
-                          }
+                                  if (birthDate == null) {
+                                    return Get.rawSnackbar(
+                                        message: 'Please enter your birthdate');
+                                  }
 
-                          if (imageFile == null) {
-                            return Get.rawSnackbar(
-                                message: 'Please select a profile picture');
-                          }
+                                  if (imageFile == null) {
+                                    return Get.rawSnackbar(
+                                        message:
+                                            'Please select a profile picture');
+                                  }
 
-                          final UserModel userModel = UserModel(
-                            email: emailFieldController.text.trim(),
-                            password: passwordFieldController.text.trim(),
-                            name: nameFieldController.text.trim(),
-                            address: addressFieldController.text.trim(),
-                            contactNumber:
-                                int.parse(contactFieldController.text.trim()),
-                            birthDate: birthDate,
-                            imageUrl: '',
-                          );
+                                  final UserModel userModel = UserModel(
+                                    email: emailFieldController.text.trim(),
+                                    password:
+                                        passwordFieldController.text.trim(),
+                                    name: nameFieldController.text.trim(),
+                                    address: addressFieldController.text.trim(),
+                                    contactNumber: int.parse(
+                                        contactFieldController.text.trim()),
+                                    birthDate: Timestamp.fromDate(birthDate),
+                                  );
 
-                          controller.registerUser(userModel);
-                        },
-                        color: Colors.redAccent,
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            color: Colors.white,
+                                  await controller.registerUser(
+                                      userModel, imageFile);
+                                },
+                          color: Colors.redAccent,
+                          child: Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -203,6 +213,7 @@ class _SignUpState extends State<SignUp> {
             rules: ['required'],
           );
         },
+        obscureText: editingController == passwordFieldController,
         keyboardType: editingController == contactFieldController
             ? TextInputType.number
             : TextInputType.text,

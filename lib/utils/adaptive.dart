@@ -118,7 +118,12 @@ Future showGenericNormalAlertDialog(String title, String message,
           ),
           actions: <Widget>[
             AdaptiveDialogAction(
-              child: Text('OK'),
+              child: Text(
+                'OK',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
               onPressed: onOk == null
                   ? () {
                       Navigator.of(context).pop();

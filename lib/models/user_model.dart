@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:simple_test/utils/imports.dart';
 
 UserModel chatModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
@@ -18,10 +18,10 @@ class UserModel {
   final String email;
   final String password;
   final String name;
-  final DateTime birthDate;
+  final Timestamp birthDate;
   final String address;
   final int contactNumber;
-  final String imageUrl;
+  String imageUrl;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         email: json['email'] == null ? null : json['email'],

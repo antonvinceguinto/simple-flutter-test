@@ -1,7 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:simple_test/screens/login.dart';
+import 'package:simple_test/utils/imports.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,9 +13,12 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.red,
+        primaryColor: Colors.red,
+        accentColor: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Login(),
+      // home: Login(),
+      home: HomePage(),
     );
   }
 }
